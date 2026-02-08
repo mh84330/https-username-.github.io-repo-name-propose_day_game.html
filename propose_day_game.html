@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Propose Day Love Game 💖</title>
+<style>
+body {
+  margin:0;
+  font-family: 'Comic Sans MS', cursive;
+  background: linear-gradient(135deg,#ffb6c1,#ffe4e1);
+  overflow:hidden;
+  text-align:center;
+}
+.screen {display:none; padding:20px;}
+.active {display:block;}
+button {
+  padding:12px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+}
+input {
+  padding:10px;
+  border-radius:20px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+.heart, .flower, .teddy {
+  position:absolute;
+  font-size:24px;
+  cursor:pointer;
+}
+.heart, .flower {animation: float 6s linear infinite;}
+@keyframes float {from{bottom:-50px; opacity:1;} to{bottom:100%; opacity:0;}}
+.long-text {font-size:18px; line-height:1.6; margin:20px 0;}
+</style>
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="lock" class="screen active">
+  <h2>🔐 Sirf hasan ki biwi ke liye 💖</h2>
+  <p>Password daalo jaawnaa 🥹</p>
+  <input id="pass" placeholder="password">
+  <br><br>
+  <button onclick="unlock()">Open 💗</button>
+  <p id="msg" style="color:#ff4d6d; margin-top:10px;"></p>
+</div>
+
+<div id="start" class="screen">
+  <h1>Good Morning meri pyari si bachi ☀️💐</h1>
+  <p class="long-text">Mera bacchaww… jaawnaa, tum mere liye duniya ki sabse pyaari cheez ho. Har subah tumhare naam se shuru karna, tumhare smile ke baare me sochna, aur bas tumhe apne dil ke kareeb mehsoos karna… ye meri zindagi ka sabse pyara hissa hai 🥹💗🎀.</p>
+  <button onclick="next('game')">Start Love Game 🎮</button>
+</div>
+
+<div id="game" class="screen">
+  <h2>Tap the hearts jaawnaa 💖</h2>
+  <p>Mera bacchaww jitna zyada tap karegi utna zyada pyaar 💗</p>
+  <p>Score: <span id="score">0</span></p>
+  <button onclick="next('hug')">Next Hug Portal 🤗</button>
+</div>
+
+<div id="hug" class="screen">
+  <h1>🤗 Hug jaawnaa! 🤗</h1>
+  <p class="long-text">Mera bacchaww… jaawnaa, socho agar hum dono abhi ek dusre ke paas hote, main tumhe tight hug me lene ke baad bas apne dil ke saath tumhe aur kareeb mehsoos karna chahta 😚💗. Tum meri duniya ho, meri happiness, aur mera sabse special feeling 💖🎀.</p>
+  <div style="font-size:60px;">🧸🤗🧸</div>
+  <button onclick="next('kiss')">Next Kiss Portal 😚</button>
+</div>
+
+<div id="kiss" class="screen">
+  <h1>😚 Kiss jaawnaa! 😚</h1>
+  <p class="long-text">Mera bacchaww… ek sweet kiss ke saath main bas itna kehna chahta hoon, tum meri jaan ho, meri hansi ho, aur meri zindagi ka sabse important hissa 😭💗🎀.</p>
+  <div style="font-size:60px;">🧸💋🧸</div>
+  <button onclick="next('proposal')">Next Proposal 💍</button>
+</div>
+
+<div id="proposal" class="screen">
+  <h1>Jaawnaa… 💍</h1>
+  <p class="long-text">Mera bacchaww… meri princess, meri pyari bachi, kya aap hamesha meri biwi banogi? 🥹💗. Tum meri duniya ho, meri har khushi ho, aur main chahta hoon ke humesha tumhare saath rahoon jaawnaa 💖🎀.</p>
+  <button onclick="next('surprise')">YES 😭💗</button>
+</div>
+
+<div id="surprise" class="screen">
+  <h1>🎉 Surprise Jaawnaa! 💖</h1>
+  <p class="long-text">Mera bacchaww… tumne game me score amazing kiya 🥹💗. Yeh chhota sa love note tumhare liye 💌: <br>"Hamesha mera bacchaww rahna, meri jaan, meri duniya 😚🎀. Tum meri happiness ho, meri zindagi ho, aur main hamesha tumhe khush dekhna chahta hoon jaawnaa."</p>
+</div>
+
+<div id="blocked" class="screen">
+  <h1>🔒 Jaawnaa maan jao 🥺</h1>
+  <p>Tumne 3 galat tries kar diye… ab game sirf meri pyari si bachi ke liye hai 😭💗</p>
+</div>
+
+<script>
+let tries = 0;
+let score = 0;
+function next(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='game') spawnHearts();
+}
+
+function unlock(){
+  const pass = document.getElementById('pass').value;
+  const msg = document.getElementById('msg');
+  if(pass === 'hasan ki biwi'){
+    next('start');
+  } else {
+    tries++;
+    if(tries >= 3){
+      next('blocked');
+    } else {
+      msg.textContent = 'Oops jaawnaa 😅 try again, mera bacchaww!';
+    }
+  }
+}
+
+function spawnHearts(){
+  setInterval(()=>{
+    const el=document.createElement('div');
+    el.className = Math.random()>0.5?'heart':'flower';
+    el.innerText = Math.random()>0.5?'💖':'🌸';
+    el.style.left = Math.random()*90+'%';
+    el.style.bottom = '-30px';
+    el.onclick = function(){ score++; document.getElementById('score').textContent = score; this.remove();
+      if(score>=50) next('surprise');
+    };
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),7000);
+  }, 500);
+}
+</script>
+</body>
+</html>
